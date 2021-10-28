@@ -1,2 +1,2 @@
 # tools
-[Rails tool](https://github.com/isshi06/tools/main/rails_tool.html)
+[Rails tool](https://isshi06.github.io/tools/rails_tool.html)
