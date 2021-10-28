@@ -57,7 +57,7 @@
         <p>変数名を入力すると、「変数名.カラム名」の形に変換します</p>
         <div class="input_textarea">
             <label for="row_number">入力</label>
-            <textarea name="schema" id="schema_input" cols="50" rows="20"></textarea>
+            <textarea name="schema" id="schema_input" cols="70" rows="20" placeholder='create_table "prefectures", charset: "utf8mb4", force: :cascade do |t|&#13;    t.string "name"&#13;    t.datetime "deleted_at"&#13;    t.datetime "created_at", precision: 6, null: false&#13;    t.datetime "updated_at", precision: 6, null: false&#13;  end'></textarea>
         </div>
         <div class="option_box">
             <div class="transform_option">
@@ -84,7 +84,7 @@
         </div>
         <div class="input_textarea">
             <label for="schema_result">変換結果</label>
-            <textarea name="schema_result" id="schema_transform_result" cols="50" rows="20"></textarea>
+            <textarea name="schema_result" id="schema_transform_result" cols="50" rows="20" placeholder="name&#13;deleted_at&#13;created_at&#13;updated_at"></textarea>
         </div>
         <button onclick="copy_3()">結果をコピーする</button>
         <p class="motivation">作成の経緯：こんなツールがあればいいのにと何度も思ったため</p>
