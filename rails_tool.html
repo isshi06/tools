@@ -159,7 +159,12 @@ function schema_transform() {
     }
 
     for (row of schema_input_array) { // entries()で要素番号取得
+        // create_table, endの行を無視
         if(row.match("t\\.") === null){
+            continue;
+        }
+        // indexの行を無視
+        if(row.match("t.index") !== null) {
             continue;
         }
 
