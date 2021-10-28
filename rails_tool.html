@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>変換</title>
+</head>
+<body>
+    <section>
+        <h1>行番号付与</h1>
+        <p>行頭の半角スペースを詰めて、行番号を付与します</p>
+        <div class="input_textarea">
+            <label for="row_number">入力</label>
+            <textarea name="row_number" id="textarea1" cols="30" rows="20"></textarea>
+        </div>
+
+        <div class="input_textarea">
+            <select name="start_number_option" id="start_number">
+                <option value="0" selected>0から</option>
+                <option value="1">1から</option>
+            </select>
+            <input type="button" value="行番号付与" onclick="add_row_number()">
+        </div>
+
+
+        <div class="input_textarea">
+            <label for="row_number_result">変換結果</label>
+            <textarea name="row_number_result" id="transform_result" cols="30" rows="20"></textarea>
+        </div>
+
+        <button onclick="copy_1()">結果をコピーする</button>
+        <p class="motivation">作成の経緯：enumに並んだstatusを直接変更する際にどれかわからないということが何度か起きたため</p>
+    </section>
+    <hr>
+    <section>
+        <h1>seedのための整形</h1>
+        <p>入力は、縦に並んだ日本語の文字列を想定しています</p>
+        <p>「{ id: 行番号, (カラム名): '行の内容' }, (改行)」の形に変換します</p>
+        <div class="input_textarea">
+            <label for="textarea_seed">入力</label>
+            <textarea name="textarea_seed" id="textarea_seed" cols="30" rows="20" placeholder="公務員&#13;経営者&#13;会社員&#13;その他"></textarea>
+        </div>
+
+        <div class="input_textarea">
+            <label for="name_column_name">カラム名</label>
+            <input type="text" name="name_column_name" id="name_column_name">
+            <input type="button" value="変換" onclick="transform_for_seed()">
+        </div>
+
+        <div class="input_textarea">
+            <label for="for_seed_result">変換結果</label>
+            <textarea name="for_seed_result" id="seed_transform_result" cols="30" rows="20" placeholder="{ id: 1, name: '公務員' },&#13;{ id: 2, name: '経営者' },&#13;{ id: 3, name: '会社員' },&#13;{ id: 4, name: 'その他' },"></textarea>
+        </div>
+
+        <button onclick="copy_2()">結果をコピーする</button>
+        <p class="motivation">作成の経緯：スプレッドシート等で頂いた項目一覧をseedの形に変換するのが面倒だったため</p>
+    </section>
+    <hr>
+    <section>
+        <h1>schemaからカラム抽出</h1>
+        <p>schema.rbの「create_table〜end」からカラム名だけを抽出します</p>
+        <p>Activeadminで使う、「row :」「column :」「f.input :」を頭につけることもできます(変換オプション)</p>
+        <p>変数名を入力すると、「変数名.カラム名」の形に変換します</p>
+        <div class="input_textarea">
+            <label for="row_number">入力</label>
+            <textarea name="schema" id="schema_input" cols="50" rows="20"></textarea>
+        </div>
+        <div class="option_box">
+            <div class="transform_option">
+                <label for="active_admin">変換オプション</label>
+                <select name="active_admin" id="active_admin_action">
+                    <option value="99" selected>選択してください</option>
+                    <optgroup label="active admin">
+                        <option value="0">index(column :)</option>
+                        <option value="1">show(row :)</option>
+                        <option value="2">form(f.input :)</option>
+                    </optgroup>
+                    <optgroup label="その他">
+                        <option value="3">シンボルにする(行頭に :)</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="transform_option">
+                <label for="variable">変数名</label>
+                <input type="text" id="variable" name="variable">
+            </div>
+            <div class="transform_option">
+                <input type="button" value="変換" onclick="schema_transform()">
+            </div>
+        </div>
+        <div class="input_textarea">
+            <label for="schema_result">変換結果</label>
+            <textarea name="schema_result" id="schema_transform_result" cols="50" rows="20"></textarea>
+        </div>
+        <button onclick="copy_3()">結果をコピーする</button>
+        <p class="motivation">作成の経緯：こんなツールがあればいいのにと何度も思ったため</p>
+    </section>
+</body>
+
+<script>
+function add_row_number(){
+    const input_1 = document.getElementById("textarea1").value; // 値取得
+    const input_1_array = input_1.split('\n');
+    let result = '';
+    const number_adjust = parseInt(document.getElementById("start_number").value);
+
+    for (row of input_1_array.entries()) { // entries()で要素番号取得
+        result += (parseInt(row[0]) + number_adjust) + ' ' + row[1].trim() + '\n';
+    }
+    document.getElementById("transform_result").value = result;
+}
+
+function copy_1() {
+    let text = document.getElementById("transform_result");
+    text.select();
+    document.execCommand("copy");
+}
+
+function transform_for_seed(){
+    const input_1 = document.getElementById("textarea_seed").value; // 値取得
+    const input_1_array = input_1.split('\n');
+    let result = '';
+    const name_column_name = document.getElementById("name_column_name").value ?? 'name';
+
+    for (row of input_1_array.entries()) { // entries()で要素番号取得
+        result += '{ id: ' + (parseInt(row[0]) + 1) + ', ' + name_column_name + ": '" + row[1] + "' },\n";
+    }
+    document.getElementById("seed_transform_result").value = result;
+}
+
+function copy_2() {
+    let text = document.getElementById("seed_transform_result");
+    text.select();
+    document.execCommand("copy");
+}
+
+function schema_transform() {
+    const schema_input = document.getElementById("schema_input").value;
+    const schema_input_array = schema_input.split('\n');
+    let result = '';
+
+    const row_top = document.getElementById("variable").value;
+    const opt_row_top = row_top != '' ? (row_top + '.') : '';
+    let active_admin_option = '';
+
+    switch(document.getElementById("active_admin_action").value){
+        case '0':
+            active_admin_option = 'column :';
+            break;
+        case '1':
+            active_admin_option = 'row :';
+            break;
+        case '2':
+            active_admin_option = 'f.input :';
+            break;
+        case '3':
+            active_admin_option = ':';
+            break;
+        default:
+            active_admin_option = '';
+    }
+
+    for (row of schema_input_array) { // entries()で要素番号取得
+        if(row.match("t\\.") === null){
+            continue;
+        }
+
+        table_column = row.match(/\"(.+)\"/g)[0].split('"')[1];
+        result += active_admin_option + opt_row_top + table_column + '\n';
+    }
+    document.getElementById("schema_transform_result").value = result;
+}
+function copy_3() {
+    let text = document.getElementById("schema_transform_result");
+    text.select();
+    document.execCommand("copy");
+}
+</script>
+<style>
+    textarea {
+        vertical-align:top;
+    }
+    .option_box {
+        display: inline-block;
+        width: 400px;
+        vertical-align: top;
+    }
+    .transform_option {
+        display: block;
+        flex-flow: column;
+        padding: 5px;
+        margin-right: 20px;
+    }
+    .input_textarea > label{
+        display: block;
+    }
+    .input_textarea > textarea{
+        display: block;
+    }
+    .input_textarea {
+        display: inline-block;
+        vertical-align: top;
+    }
+    .motivation {
+        color: gray;
+    }
+</style>
+</html>
