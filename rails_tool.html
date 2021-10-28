@@ -12,9 +12,8 @@
         <p>行頭の半角スペースを詰めて、行番号を付与します</p>
         <div class="input_textarea">
             <label for="row_number">入力</label>
-            <textarea name="row_number" id="textarea1" cols="30" rows="20"></textarea>
+            <textarea name="row_number" id="textarea1" cols="30" rows="20" placeholder="status_1&#13;status_2&#13;status_3"></textarea>
         </div>
-
         <div class="input_textarea">
             <select name="start_number_option" id="start_number">
                 <option value="0" selected>0から</option>
@@ -22,13 +21,10 @@
             </select>
             <input type="button" value="行番号付与" onclick="add_row_number()">
         </div>
-
-
         <div class="input_textarea">
             <label for="row_number_result">変換結果</label>
-            <textarea name="row_number_result" id="transform_result" cols="30" rows="20"></textarea>
+            <textarea name="row_number_result" id="transform_result" cols="30" rows="20" placeholder="0 status_1&#13;1 status_2&#13;2 status_3"></textarea>
         </div>
-
         <button onclick="copy_1()">結果をコピーする</button>
         <p class="motivation">作成の経緯：enumに並んだstatusを直接変更する際にどれかわからないということが何度か起きたため</p>
     </section>
@@ -41,18 +37,15 @@
             <label for="textarea_seed">入力</label>
             <textarea name="textarea_seed" id="textarea_seed" cols="30" rows="20" placeholder="公務員&#13;経営者&#13;会社員&#13;その他"></textarea>
         </div>
-
         <div class="input_textarea">
             <label for="name_column_name">カラム名</label>
             <input type="text" name="name_column_name" id="name_column_name">
             <input type="button" value="変換" onclick="transform_for_seed()">
         </div>
-
         <div class="input_textarea">
             <label for="for_seed_result">変換結果</label>
             <textarea name="for_seed_result" id="seed_transform_result" cols="30" rows="20" placeholder="{ id: 1, name: '公務員' },&#13;{ id: 2, name: '経営者' },&#13;{ id: 3, name: '会社員' },&#13;{ id: 4, name: 'その他' },"></textarea>
         </div>
-
         <button onclick="copy_2()">結果をコピーする</button>
         <p class="motivation">作成の経緯：スプレッドシート等で頂いた項目一覧をseedの形に変換するのが面倒だったため</p>
     </section>
