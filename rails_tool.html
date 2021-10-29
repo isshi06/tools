@@ -8,10 +8,23 @@
 </head>
 <body>
     <header>
-        <h1>Rails Tools</h1>
-        <a href="./">READMEへ(工事中)</a>
+        <h1 id="top">Rails Tools</h1>
+        <ul id="table_of_contents">
+            <li><a href="./">READMEへ(工事中)</a></li>
+            <li><a href="#row_number">行番号付与</a></li>
+            <li><a href="#seed">文字列の並びをseed用に変換</a></li>
+            <li><a href="#columns_from_schema">schemaからカラム抽出</a></li>
+            <li><a href="#open_api_properties_from_schema">schemaからopen_apiのpropertiesの形式</a></li>
+            <li><a href="#json_from_schema">schemaからjson形式</a></li>
+        </ul>
+        <!-- <a href="./">READMEへ(工事中)</a>
+        <a href="#row_number">行番号付与</a>
+        <a href="#seed">文字列の並びをseed用に変換</a>
+        <a href="#columns_from_schema">schemaからカラム抽出</a>
+        <a href="#open_api_properties_from_schema">schemaからopen_apiのpropertiesの形式</a>
+        <a href="#json_from_schema">schemaからjson形式</a> -->
     </header>
-    <section>
+    <section id="row_number">
         <h1>行番号付与</h1>
         <p>行頭の半角スペースを詰めて、行番号を付与します</p>
         <div class="input_textarea">
@@ -31,9 +44,10 @@
         </div>
         <button onclick="copy_1()">結果をコピーする</button>
         <p class="motivation">作成の経緯：enumに並んだstatusを直接変更する際にどれかわからないということが何度か起きたため</p>
+        <a href="#top">TOPへ戻る</a>
     </section>
     <hr>
-    <section>
+    <section id="seed">
         <h1>seedのための整形</h1>
         <p>入力は、縦に並んだ日本語の文字列を想定しています</p>
         <p>「{ id: 行番号, (カラム名): '行の内容' }, (改行)」の形に変換します</p>
@@ -52,16 +66,17 @@
         </div>
         <button onclick="copy_2()">結果をコピーする</button>
         <p class="motivation">作成の経緯：スプレッドシート等で頂いた項目一覧をseedの形に変換するのが面倒だったため</p>
+        <a href="#top">TOPへ戻る</a>
     </section>
     <hr>
-    <section>
+    <section id="columns_from_schema">
         <h1>schemaからカラム抽出</h1>
         <p>schema.rbの「create_table〜end」からカラム名だけを抽出します</p>
         <p>Activeadminで使う、「row :」「column :」「f.input :」を頭につけることもできます(変換オプション)</p>
         <p>変数名を入力すると、「変数名.カラム名」の形に変換します</p>
         <div class="input_textarea">
             <label for="row_number">入力</label>
-            <textarea name="schema" id="schema_input" cols="70" rows="20" placeholder='create_table "prefectures", charset: "utf8mb4", force: :cascade do |t|&#13;    t.string "name"&#13;    t.datetime "deleted_at"&#13;    t.datetime "created_at", precision: 6, null: false&#13;    t.datetime "updated_at", precision: 6, null: false&#13;  end'></textarea>
+            <textarea name="schema" id="schema_input" cols="70" rows="20" placeholder='create_table "prefectures", charset: "utf8mb4", force: :cascade do |t|&#13;    t.string "name"&#13;    t.datetime "deleted_at"&#13;    t.datetime "created_at", precision: 6, null: false&#13;    t.datetime "updated_at", precision: 6, null: false&#13;end'></textarea>
         </div>
         <div class="option_box">
             <div class="transform_option">
@@ -88,10 +103,59 @@
         </div>
         <div class="input_textarea">
             <label for="schema_result">変換結果</label>
-            <textarea name="schema_result" id="schema_transform_result" cols="50" rows="20" placeholder="name&#13;deleted_at&#13;created_at&#13;updated_at"></textarea>
+            <textarea name="schema_result" id="schema_transform_result" cols="30" rows="20" placeholder="name&#13;deleted_at&#13;created_at&#13;updated_at"></textarea>
         </div>
         <button onclick="copy_3()">結果をコピーする</button>
         <p class="motivation">作成の経緯：こんなツールがあればいいのにと何度も思ったため</p>
+        <a href="#top">TOPへ戻る</a>
+    </section>
+    <hr>
+    <section id="open_api_properties_from_schema">
+        <h1>schemaからopen_apiのpropertiesの形式</h1>
+        <p>schema.rbの「create_table〜end」をopen_apiのpropertiesの形に変換します</p>
+        <p>datetime→string, bigint→integer(format: int64)の変換が行われます</p>
+        <p>「exampleを追加する」にチェックを入れるとtype: ●●の後にexampleが追加されます(仮の値が入っています)</p>
+        <div class="input_textarea">
+            <label for="row_number">入力</label>
+            <textarea name="schema" id="schema_to_properties_input" cols="70" rows="20" placeholder='create_table "prefectures", charset: "utf8mb4", force: :cascade do |t|&#13;    t.string "name"&#13;    t.datetime "deleted_at"&#13;    t.datetime "created_at", precision: 6, null: false&#13;    t.datetime "updated_at", precision: 6, null: false&#13;end'></textarea>
+        </div>
+        <div class="option_box">
+            <div class="transform_option">
+                <input type="checkbox" id="with_example" name="with_example">
+                <label for="with_example">exampleを追加する</label>
+            </div>
+            <div class="transform_option">
+                <input type="button" value="変換" onclick="schema_to_properties()">
+            </div>
+        </div>
+        <div class="input_textarea">
+            <label for="schema_to_properties_result">変換結果</label>
+            <textarea name="schema_to_properties_result" id="schema_to_properties_result" cols="30" rows="20" placeholder="name:&#13;  type: string&#13;deleted_at:&#13;  type: string&#13;created_at&#13;  type: string&#13;updated_at&#13;  type: string"></textarea>
+        </div>
+        <button onclick="copy_4()">結果をコピーする</button>
+        <p class="motivation">作成の経緯：作業の効率化が難しかったため</p>
+        <a href="#top">TOPへ戻る</a>
+    </section>
+    <hr>
+    <section id="json_from_schema">
+        <h1>schemaからjson</h1>
+        <p>schema.rbの「create_table〜end」をjsonの形に変換します</p>
+        <div class="input_textarea">
+            <label for="row_number">入力</label>
+            <textarea name="schema" id="schema_to_json_input" cols="70" rows="20" placeholder='create_table "prefectures", charset: "utf8mb4", force: :cascade do |t|&#13;    t.string "name"&#13;    t.datetime "deleted_at"&#13;    t.datetime "created_at", precision: 6, null: false&#13;    t.datetime "updated_at", precision: 6, null: false&#13;  end'></textarea>
+        </div>
+        <div class="option_box">
+            <div class="transform_option">
+                <input type="button" value="変換" onclick="schema_to_json()">
+            </div>
+        </div>
+        <div class="input_textarea">
+            <label for="schema_to_json_result">変換結果</label>
+            <textarea name="schema_to_json_result" id="schema_to_json_result" cols="30" rows="20" placeholder='{&#13;  "name": "",&#13;  "deleted_at": "",&#13;  "created_at": "",&#13;  "updated_at": ""&#13;}'></textarea>
+        </div>
+        <button onclick="copy_5()">結果をコピーする</button>
+        <p class="motivation">作成の経緯：カラムが多いテーブルをpostmanでデバッグする際に面倒だった為</p>
+        <a href="#top">TOPへ戻る</a>
     </section>
 </body>
 
@@ -178,6 +242,138 @@ function copy_3() {
     text.select();
     document.execCommand("copy");
 }
+
+function schema_to_properties(){
+    const schema_input = document.getElementById("schema_to_properties_input").value;
+    let columns = column_list_with_type(schema_input);
+    let result = '';
+    const with_example = document.getElementById("with_example").checked;
+    console.log(with_example);
+
+    console.log(columns);
+    for(row of columns) {
+        result += row[1] + ':\n';
+        switch(row[0]){
+            case 'datetime':
+                type = 'string'
+                break;
+            case 'bigint':
+                type = 'integer\n  format: int64';
+                break;
+            default:
+                type = row[0];
+        }
+        result += '  type: ' + type + '\n';
+
+        if(with_example){
+            console.log('with example mode');
+            switch(row[0]){
+            case 'datetime':
+                example = '2020-01-01 09:10:11'
+                break;
+            case 'bigint':
+                example = '123456';
+                break;
+            case 'string':
+                example = 'dog';
+                break;
+            case 'text':
+                example = 'texttexttexttexttexttexttexttexttexttext';
+                break;
+            case 'integer':
+                example = '1234';
+                break;
+            case 'boolean':
+                example = 'true';
+                break;
+            default:
+                example = '';
+            }
+            result += '  example: ' + example + '\n';
+        }
+    }
+
+    document.getElementById("schema_to_properties_result").value = result;
+}
+
+// 入力: textareaに入力されたschema情報
+// 出力: カラム名の配列
+function column_list(schema_data) {
+    const schema_input_array = schema_data.split('\n');
+    let result = [];
+    console.log(schema_input_array);
+
+    for (row of schema_input_array) {
+        // create_table, endの行を無視
+        if(row.match("t\\.") === null){
+            continue;
+        }
+        // indexの行を無視
+        if(row.match("t.index") !== null) {
+            continue;
+        }
+
+        table_column = row.match(/\"(.+)\"/g)[0].split('"')[1];
+        result.push(table_column);
+    }
+
+    return result;
+}
+
+// 入力: textareaに入力されたschema情報
+// 出力: [型, カラム名], [型, カラム名]..の配列
+function column_list_with_type(schema_data) {
+    const schema_input_array = schema_data.split('\n');
+    let result = [];
+    // console.log(schema_input_array);
+
+    for (row of schema_input_array) {
+        // create_table, endの行を無視
+        if(row.match("t\\.") === null){
+            continue;
+        }
+        // indexの行を無視
+        if(row.match("t.index") !== null) {
+            continue;
+        }
+
+        column_name = row.match(/\"(.+)\"/g)[0].split('"')[1];
+        column_type = row.match(/t\.([a-z]+)/)[1];
+        // console.log(column_type);
+        result.push([column_type, column_name]);
+    }
+
+    return result;
+}
+
+function copy_4() {
+    let text = document.getElementById("schema_to_properties_result");
+    text.select();
+    document.execCommand("copy");
+}
+
+function schema_to_json() {
+    const schema_to_json_input = document.getElementById("schema_to_json_input").value;
+    const db_columns = column_list(schema_to_json_input);
+    let result = '{\n';
+    for (row of db_columns.entries()) {
+        if(row[0] === (db_columns.length - 1)){
+            result += '  "' + row[1] + '": ""\n';
+        }else{
+            result += '  "' + row[1] + '": "",\n';
+        }
+    }
+    console.log(result);
+    result += '}';
+
+    document.getElementById("schema_to_json_result").value = result;
+}
+function copy_5() {
+    let text = document.getElementById("schema_to_json_result");
+    text.select();
+    document.execCommand("copy");
+}
+
 </script>
 <style>
     textarea {
